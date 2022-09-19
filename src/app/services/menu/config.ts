@@ -22,8 +22,8 @@ export const getMenuData: any[] = [
     title: 'FB',
     key: 'apps',
     icon: 'fa fa-server',
-    children: [   
-      
+    children: [
+
       {
         title: 'Sell',
         key: 'appsProfile',
@@ -68,8 +68,20 @@ export const getMenuData: any[] = [
         icon: 'fe fe-copy',
         url: '/apps/productoptions',
       },
-      
-     
+      {
+        title: 'Dine In',
+        key: 'appsProductOptions',
+        icon: 'fe fe-copy',
+        url: '/apps/dinein',
+      },
+      {
+        title: 'Price Book',
+        key: 'appsProductOptions',
+        icon: 'fe fe-copy',
+        url: '/apps/Pricebook',
+      },
+
+
     ]
   },
   {
@@ -78,7 +90,7 @@ export const getMenuData: any[] = [
     key: 'appsSetting',
     url: '/apps/receipt',
   },
- 
+
   {
     title: 'Customers',
     key: 'appsSetting',
@@ -172,8 +184,8 @@ export const getMenuData: any[] = [
         icon: 'fe fe-copy',
         url: '/apps/productoptions',
       },
-      
-     
+
+
     ]
   },
 

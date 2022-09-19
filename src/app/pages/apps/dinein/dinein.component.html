@@ -1,0 +1,148 @@
+<div>
+    <div class="hk-pg-wrapper" [hidden]="!show">
+
+        <div class="hk-pg-header">
+            <h4 class="hk-pg-title">&nbsp;&nbsp; DiningArea</h4>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4 text-right">
+                    <input type="text" class="form-control" placeholder="Search DiningArea.." [(ngModel)]="term">
+                </div>
+                <div class="col-xl-8 mb-10 text-right">
+                    <a (click)="show = !show">
+                        <button class="btn btn-success btn-sm mx-10 w-20">
+                            <span class="btn-text"> + Add DiningArea</span>
+                        </button>
+                    </a>
+                </div>
+            </div><br>
+            <div class="col-xl-12 pl-0 pr-0">
+                <section class="hk-sec-wrapper">
+                    <div class="row">
+                        <div class="col-sm">
+                            <form>
+                                <div class="table-wrap">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0 table-sm">
+                                            <thead>
+                                                <tr style="background-color:rgb(217, 226, 250);">
+                                                    <th><strong><a class="font-12">Store Name</a></strong> </th>
+                                                    <th><strong><a class="font-12">Dining Area</a></strong>
+                                                    </th>
+                                                    <th class="text-center"><strong><a class="font-12">Dining
+                                                                Table</a></strong>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of dining ">
+                                                    <td class="font-12"><strong><a (click)="edittable(item.Id) "
+                                                                class="text-info">{{item.StoreName}}</a></strong></td>
+                                                    <td class="font-12">{{item.DiningArea}}</td>
+                                                    <td class="font-12">{{item.DiningTable}}</td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div class="hk-pg-wrapper" [hidden]="show">
+        <div class="hk-pg-header">
+            <h5 class="ml-3 mt-3">
+                <strong *ngIf="!(dining.Id > 0)">Add Dine In</strong>
+                <strong *ngIf="dining.Id > 0">Edit Dine In:
+                    <a class="btn btn-sm btn-light" href="javascript: void(0);">
+                        {{dining.DiningArea}}
+                    </a> </strong>
+                <!-- <strong >Edit Variant Group</strong> -->
+            </h5>
+        </div>
+        <div class="container">
+            <form name="form" (ngSubmit)="DiningArea.StoreId != 0 && f.form.valid && savearea()" #f="ngForm" novalidate>
+                <section class="hk-sec-wrapper">
+                    <div class="col-xl-12">
+                        <div class="form-group">{{DiningArea.StoreId}}
+                            <select [(ngModel)]="DiningArea.StoreId" class="required form-control custom-select"
+                                name="store1" #store1="ngModel"
+                                [ngClass]="{'is-invalid': f.submitted && DiningArea.StoreId==0}">
+                                <option value="0" selected>Select Store</option>
+                                <option value="{{item.id}}" *ngFor="let item of store">{{item.name}}</option>
+                            </select>
+                            <div *ngIf="f.submitted && DiningArea.StoreId==0" class="invalid-feedback">
+                                <div *ngIf="DiningArea.StoreId==0">Select a store !</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span style="font-weight: bold;">DiningArea</span> <span class="text-danger">*</span>
+                            <input type="text" [(ngModel)]="DiningArea.Description" name="DAName" class="form-control"
+                                #DAName="ngModel" [ngClass]="{'is-invalid': f.submitted && DAName.invalid}" required>
+                            <div *ngIf="f.submitted && DAName.invalid" class="invalid-feedback">
+                                <div *ngIf="DAName.errors.required">DiningArea Name is required !</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span style="font-weight: bold;">Quick Add</span>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter prefix. eg: 'Table'" #prefix>
+                                <input type="text" (keypress)="omit_special_char($event)" class="form-control"
+                                    placeholder="Enter No. of tables" #count>
+                                <div class="input-group-append">
+                                    <button class="btn btn-icon btn-light" (click)="quickadd(prefix.value,count.value)"
+                                        type="button">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span style="font-weight: bold;">DiningTable</span> <span class="text-danger">*</span>
+                            <div class="input-group" *ngFor="let item of DiningArea.DiningTable; let i=index">
+                                <input type="text" class="form-control" [(ngModel)]="item.Description"
+                                    name="Description{{i}}" #Description{{i}}="ngModel" required
+                                    aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-icon btn-light" (click)="deleteTable(i)" type="button"><span
+                                            class="btn-icon-wrap"><i class="icon-trash"></i></span></button>
+                                </div>
+                                <br><br>
+                            </div>
+                            <div class="text-right">
+                                <button type="button" class="btn btn-link sp-nav-button" (click)="addTable()"
+                                    style="font-weight: bold;">+ Add Table</button>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 pl-0 pr-0 text-right">
+                            <button class="btn btn-danger btn-sm mx-10 w-10" (click)="back()">Cancel</button>&nbsp;
+                            <button class="btn btn-success btn-sm mx-10 w-15" (click)="focus()">Save DiningArea</button>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </div>
+
+    <ng-template #contentdetail let-modal>
+        <div class="modal d-block position-static overflow-show" tabindex="-1" role="dialog">
+            <div class="modal-dialog ma-0" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Do You Really Want To Delete Dining Area? </h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success btn-sm mx-10 w-20" data-dismiss="modal" aria-label="Close"
+                            (click)="DeleteTable(deleteId);modal.close()">Yes</button>
+                        <button class="btn btn-success btn-sm mx-10 w-20" data-dismiss="modal" aria-label="Close"
+                            (click)="modal.close()">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>

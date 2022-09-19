@@ -75,6 +75,8 @@ import { AdditionalChargeComponent } from './additional-charge/additional-charge
 import { OptiongroupComponent } from './optiongroup/optiongroup.component'
 import { SellComponent } from './sell/sell.component'
 import { ProductfbComponent } from './productfb/productfb.component'
+import { DineinComponent } from './dinein/dinein.component'
+import { PricebookComponent } from './pricebook/pricebook.component'
 
 
 
@@ -334,6 +336,16 @@ const routes: Routes = [
     path: 'asset',
     component: AssetsComponent,
     data: { title: 'Assets App' },
+  },
+  {
+    path: 'Pricebook',
+    component: PricebookComponent,
+    data: { title: 'Price App' },
+  },
+  {
+    path: 'dinein',
+    component: DineinComponent,
+    data: { title: 'Dine In' },
   },
   {
     path: 'assettypes',

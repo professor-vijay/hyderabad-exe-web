@@ -17,8 +17,8 @@ export class OrderModule {
   ChargeJson: string
   Charges: number
   Closed: boolean
-  Updated:boolean
-  SuppliedById:number
+  Updated: boolean
+  SuppliedById: number
   OrderedById: number
   CompanyId: number
   CustomerAddressId: number
@@ -49,6 +49,7 @@ export class OrderModule {
   OrderTaxDisc: number
   OrderTotDisc: number
   OrderTypeId: number
+  OrderType: number
   OrderName: string
   PaidAmount: number
   PreviousStatusId: number
@@ -90,7 +91,8 @@ export class OrderModule {
   app: string = 'exe'
   CreatedDate: string
   SpecialOrder: boolean = false
-  constructor(ordertypeid) {
+  constructor(ordertype) {
+    console.log(ordertype)
     var ordertypes = {
       '1': 'Dine In',
       '2': 'Take Away',
@@ -101,7 +103,7 @@ export class OrderModule {
     this.datastatus = 'new_order'
     var advance_order_types = [3, 4]
     this.DiscType = 1
-    this.OrderTypeId = ordertypeid
+    this.OrderTypeId = ordertype
     this.OrderName = ordertypes[this.OrderTypeId.toString()]
     this.BillAmount = 0
     this.BillStatusId = 1
@@ -131,6 +133,7 @@ export class OrderModule {
     this.OrderDiscount = 0
     this.OrderTaxDisc = 0
     this.OrderTotDisc = 0
+    this.OrderType = ordertype
     this.subtotal = 0
     this.PaymentTypeId = 6
     this.StorePaymentTypeId = 0
@@ -452,7 +455,7 @@ export class OrderModule {
 export class OrderItemModule {
   Id: number
   CategoryId: number
-  CompanyId:number
+  CompanyId: number
   ComplementryQty: number
   DiscAmount: number
   DiscPercent: number
@@ -510,7 +513,7 @@ export class OrderItemModule {
     this.CategoryId = product.categoryId || product.CategoryId
     this.ComplementryQty = product.ComplementryQty ? product.ComplementryQty : 0
     this.MinimumQty = product.minimumQty || product.MinimumQty
-    this.DiscAmount =  product.discAmount || product.DiscAmount
+    this.DiscAmount = product.discAmount || product.DiscAmount
     this.DiscPercent = product.discPercent || product.DiscPercent
     this.DiscType = product.discType || product.DiscType
     this.Extra = product.Extra ? product.Extra : 0
@@ -521,7 +524,7 @@ export class OrderItemModule {
     this.KOTId = 0
     this.Message = ''
     this.MinimumQty = product.minimumQty || product.MinimumQty
-    this.Name = product.product || product.Product 
+    this.Name = product.product || product.Product
     this.Product = product.product || product.Product
     this.Note = ''
     this.OptionJson = ''
@@ -659,7 +662,7 @@ export class OptionModule {
 export class CurrentItemModule {
   Id: number
   CategoryId: number
-  CompanyId:number
+  CompanyId: number
   ComplementryQty: number
   DiscAmount: number
   DiscPercent: number
@@ -715,7 +718,7 @@ export class CurrentItemModule {
     this.DiscAmount = product.DiscAmount ? product.DiscAmount : null
     this.DiscPercent = product.DiscPercent ? product.DiscPercent : null
     this.DiscType = product.DiscType ? product.DiscType : 1
-    this.Extra = 0
+    this.Extra = product.extra ? product.extra : 0
     this.FreeQtyPercentage = product.FreeQtyPercentage
     this.ItemDiscount = 0
     this.KitchenUserId = null
@@ -730,10 +733,10 @@ export class CurrentItemModule {
     this.OptionGroup = []
     this.OrderDiscount = 0
     this.OrderId = 0
-    this.ProductId = product.productId  || product.ProductId
+    this.ProductId = product.productId || product.ProductId
     this.ProductKey = product.ProductKey ? product.ProductKey : ''
-    this.Price = 0
-    this.Quantity = product.Quantity = 1
+    this.Price = product.price || product.Price
+    this.Quantity = product.quantity || product.Quantity
     this.StatusId = 0
     this.Tax1 = product.tax1 || product.Tax1
     this.Tax2 = product.tax2 || product.Tax2
@@ -767,6 +770,7 @@ export class CurrentItemModule {
             console.log(option)
             if (option.selected) {
               this.TotalAmount += option.Price
+              console.log(this.TotalAmount)
             }
           })
         }

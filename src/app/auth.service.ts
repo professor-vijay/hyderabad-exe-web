@@ -603,6 +603,14 @@ export class AuthService {
     return this.http.post(this.dburl + 'updatepreorder', order)
   }
 
+  updatepreorderbyinvoice(order) {
+    return this.http.post(this.dburl + 'updatepreorderbyinvoice?_id=', order)
+  }
+
+  erroredorders() {
+    return this.http.get(this.dburl + 'geterroredorders')
+  }
+
 
   ordertransaction(transactionlist) {
     return this.http.post(this.base_url1 + `Receipt/ordertransaction`, transactionlist)
@@ -633,10 +641,7 @@ export class AuthService {
   }
   ///////////////////////////////////////// Receipts data ///////////////////////////////////////
   GetReceipts(Storeid, fromdate, todate, invoice) {
-    return this.http.get(
-      this.base_url1 +
-      'Receipt/Gettestdata?Storeid=' +
-      Storeid +
+    return this.http.get(this.base_url1 + 'Receipt/Gettestdata?Storeid=' + Storeid +
       '&fromdate=' +
       fromdate +
       '&todate=' +
@@ -995,14 +1000,14 @@ export class AuthService {
   }
 
   gettableorderbykey() { }
-  
 
- 
+
+
   getOrderById(orderid) {
-    return this.http.get(this.base_url + `POSOrder/getOrderById?orderid=` + orderid)
+    return this.http.get(this.base_url1 + `Sale/getOrderById?orderid=` + orderid)
   }
 
-  
+
 
   //16-06-2022
   getstoreuporders(storeid) {
@@ -1010,7 +1015,7 @@ export class AuthService {
   }
 
   updateorder(payload) {
-    return this.http.post(this.base_url + 'POSOrder/updateorder_2', payload)
+    return this.http.post(this.base_url1 + 'Sale/updateorder_2', payload)
   }
 
   logtransactions(transactions) {
@@ -1061,10 +1066,10 @@ export class AuthService {
   saveorderfbdb(order) {
     return this.http.post(this.dburl + 'saveorderfb', order)
   }
-  
+
   saveorderfb(payload) {
     return this.http.post(this.base_url1 + 'Sale/saveorder_3', payload)
-  }  
+  }
 
   transactionsinvoice(invoiceno) {
     return this.http.get(this.dburl + 'transactionsbyinvoice?InvoiceNo=' + invoiceno)
@@ -1076,7 +1081,7 @@ export class AuthService {
 
 
   // dine tables
-  
+
   splitTable(body) {
     return this.http.post(this.dburl + 'splitTable', body)
   }
@@ -1099,6 +1104,51 @@ export class AuthService {
     return this.http.get(this.dburl + 'gettblorderby_id?_id=' + orderid)
   }
 
+  getdining(CompanyId) {
+    return this.http.get(this.base_url1 + "Sale/Get?CompanyId=" + CompanyId)
+  }
+
+  deleteArea(Id) {
+    return this.http.get(this.base_url + "Sale/Delete?Id=" + Id);
+  }
+
+  EditTable(Id) {
+    return this.http.get(this.base_url1 + "Sale/GetById?Id=" + Id);
+  }
+  UpdateTable(formdata) {
+    let body = this.toFormData(formdata);
+    return this.http.post(this.base_url1 + "Sale/Update", body);
+  }
+
+  addtable(formdata) {
+    let body = this.toFormData(formdata);
+    return this.http.post(this.base_url1 + "Sale/CreateArea", body);
+  }
+
+  getUnfinishedOrders(storeid) {
+    return this.http.get(this.base_url1 + `Sale/getUnfinishedOrders?storeid=` + storeid)
+  }
+
+  storeselect(body) {
+    return this.http.post(this.dburl + 'storeselect', body)
+  }
+
+  getPendOrderSales() {
+    return this.http.get(this.dburl + `getPendOrderSales`)
+  }
+
+  Updatepricebook(formdata) {
+    let body = this.toFormData(formdata)
+    return this.http.post(this.base_url1 + 'Product/Update', body)
+  }
+  GetPrice(storeid) {
+    return this.http.get(this.base_url1 + `Product/GetPrice?storeid=` + storeid)
+  }
+
+  Updateoptionbook(formdata) {
+    let body = this.toFormData(formdata)
+    return this.http.post(this.base_url1 + 'Product/UpdateOption', body)
+  }
 }
 
 

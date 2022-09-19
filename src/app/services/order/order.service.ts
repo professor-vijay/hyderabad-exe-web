@@ -231,8 +231,7 @@ export class OrderService {
   CompanyId: any
   StoreId: any
   getData() {
-    this.auth.getdbdata(['orderkey', 'loginfo', 'printersettings','diningtabledb','diningareadb'])
-      .subscribe(data => {
+    this.auth.getdbdata(['orderkey', 'loginfo', 'printersettings','diningtabledb','diningareadb']).subscribe(data => {
         this.orderkey = data['orderkey'][0]
         this.loginfo = data['loginfo'][0]
         this.printersettings = data['printersettings'][0]
@@ -242,6 +241,7 @@ export class OrderService {
         this.StoreId = this.loginfo.storeId
         this.orderkeyValidation()
       })
+      
   }
 
   orderkeyValidation() {

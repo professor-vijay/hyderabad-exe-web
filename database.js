@@ -16,7 +16,7 @@ db.tableordersdb = new Datastore({ filename: './database/tableorders.db', autolo
 db.wastagedb = new Datastore({ filename: './database/wastage.db', autoload: true });
 db.transactionsdb = new Datastore({ filename: './database/transactions.db', autoload: true });
 db.transactionlogsdb = new Datastore({ filename: './database/transactionlogs.db', autoload: true });
-// db.preordersdb = new Datastore({ filename: './database/preorders.db', autoload: true });
+// db.preorders = new Datastore({ filename: './database/preorders.db', autoload: true });
 db.orderkeydb = new Datastore({ filename: './database/orderkey.db', autoload: true });
 db.productdb = new Datastore({ filename: './database/products.db' });
 db.customerdb = new Datastore({ filename: './database/customer.db' });
@@ -27,7 +27,7 @@ db.discountruledb = new Datastore({ filename: './database/discountrule.db' });
 db.orderstatusdb = new Datastore({ filename: './database/orderstatus.db' });
 db.ordertypedb = new Datastore({ filename: './database/ordertype.db' });
 db.pendingordersdb = new Datastore({ filename: './database/pendingorders.db', autoload: true });
-db.preordersdb = new Datastore({ filename: './database/preorders.db', autoload: true });
+db.preorders = new Datastore({ filename: './database/preorders.db', autoload: true });
 db.paymentstatusdb = new Datastore({ filename: './database/paymentstatus.db' });
 db.paymenttypedb = new Datastore({ filename: './database/paymenttype.db' });
 db.diningareadb = new Datastore({ filename: './database/diningarea.db', autoload: true });
@@ -621,6 +621,50 @@ app.get('/deleteorderfb', function (req, res) {
     })
 });
 
+app.post('/updateorder', function (req, res) {
+    db.pendingordersdb.update({ _id: req.body._id }, req.body, function (err1, newDoc) { // Callback is optional
+        db.transactions.remove({ InvoiceNo: req.body.InvoiceNo }, { multi: true }, function (err, num) {
+
+        })
+        res.send({ msg: "success" })
+    })
+});
+
+
+
+//////////////////////errored orders
+app.get('/geterroredorders', function (req, res) {
+    var i = 0;
+    var data = {}
+    db.preorders.find({ status: "E" }, function (err1, orders) { // Callback is optional
+        data["preorders_e"] = orders
+        i++
+        if (i == 4)
+            res.send(data)
+    })
+    db.pendingordersdb.find({ status: "E" }, function (err1, orders) { // Callback is optional
+        data["pendingorders_e"] = orders
+        i++
+        if (i == 4)
+            res.send(data)
+    })
+    db.preorders.find({ status: "P" }, function (err1, orders) { // Callback is optional
+        data["preorders_p"] = orders
+        i++
+        if (i == 4)
+            res.send(data)
+    })
+    db.pendingordersdb.find({ status: "N" }, function (err1, orders) { // Callback is optional
+        data["pendingorders_p"] = orders
+        i++
+        if (i == 4)
+            res.send(data)
+    })
+
+});
+
+
+
 app.post('/updatepreference', function (req, res) {
     console.dir(req.body);
     db.preferencedb.update({ companyId: req.body.companyId }, req.body, { upsert: true }, function (err, newDoc) {
@@ -632,7 +676,7 @@ app.post('/updatepreference', function (req, res) {
 // app.post('/savepreorder', function (req, res) {
 //     console.log(req.ip, req.hostname)
 //     req.body.status = "P"
-//     db.preordersdb.insert(req.body, function (err1, newDoc) { // Callback is optional
+//     db.preorders.insert(req.body, function (err1, newDoc) { // Callback is optional
 //         console.log('Line: 188', err1)
 //         res.send({ msg: "success" })
 //     })
@@ -645,6 +689,8 @@ app.post('/updatepreference', function (req, res) {
 //         res.send({ msg: "success" })
 //     })
 // });
+
+
 
 app.post('/saveStockBatch', function (req, res) {
     console.log("qwerty", req.body)
@@ -688,6 +734,20 @@ app.post('/saveStockBatch', function (req, res) {
 //         res.send(docs)
 //     })
 // });
+
+
+app.get('/getPendOrderSales', function (req, res) {
+    db.pendingordersdb.find({ OrderedDate: moment().format('YYYY-MM-DD') }, (err, orders) => {
+        let obj = { sales: 0, paid: 0 }
+        orders.forEach(order => {
+            if (order.OrderStatusId != -1) {
+                obj.sales += order.BillAmount
+                obj.paid += order.PaidAmount
+            }
+        })
+        res.send(obj)
+    })
+});
 app.post('/updatepurchaseorder', function (req, res) {
     db.orderdb.update({ _id: req.body._id }, req.body, function (err1, newDoc) {   // Callback is optional
         console.log(err1, newDoc, req.body._id, req.body.status)
@@ -974,9 +1034,11 @@ app.get('/syncdata', function (req, response) {
     })
 })
 
+
+
 app.get('/getpreorderby_id', function (req, res) {
     console.log(req.ip, req.hostname)
-    db.preordersdb.findOne({ _id: req.query._id }, function (err1, docs) { // Callback is optional
+    db.preorders.findOne({ _id: req.query._id }, function (err1, docs) { // Callback is optional
         console.log('Line: 203', err1)
         res.send(docs)
     })
@@ -984,13 +1046,13 @@ app.get('/getpreorderby_id', function (req, res) {
 
 // pre save order
 app.get('/getpreorders', function (req, res) {
-    db.preordersdb.find({ status: "P" }, function (err1, docs) {   // Callback is optional
+    db.preorders.find({ status: "P" }, function (err1, docs) {   // Callback is optional
         console.log('Line: 195', err1)
         res.send(docs)
     })
 });
 app.post('/updatepreorder', function (req, res) {
-    db.preordersdb.update({ _id: req.body._id }, req.body, function (err1, newDoc) {   // Callback is optional
+    db.preorders.update({ _id: req.body._id }, req.body, function (err1, newDoc) {   // Callback is optional
         console.log("Line: 218", err1, newDoc, req.body._id, req.body.status)
         if (req.body.status == "S")
             db.transactionsdb.remove({ InvoiceNo: req.body.InvoiceNo }, { multi: true }, function (err, num) { })
@@ -999,13 +1061,21 @@ app.post('/updatepreorder', function (req, res) {
         res.send({ msg: "success" })
     })
 });
+
+app.post('/updatepreorderbyinvoice', function (req, res) {
+    db.preorders.update({ InvoiceNo: req.body.InvoiceNo }, req.body, { upsert: true }, function (err1, newDoc) { // Callback is optional
+        console.log('Line: 227', err1)
+        res.send({ msg: "success" })
+    })
+});
+
 app.get('/transactionsbyinvoice', function (req, res) {
     db.transactionsdb.find({ InvoiceNo: req.query.InvoiceNo }, function (err, trnxns) {
         res.send(trnxns)
     })
 });
 app.post('/addtransaction', function (req, res) {
-    db.transactions.insert(req.body, function (err, trnxns) {
+    db.transactionsdb.insert(req.body, function (err, trnxns) {
         res.send({ message: "Transaxn save success" })
     })
 });
@@ -1040,6 +1110,52 @@ app.post('/getdbdata', function (req, res) {
     })
 });
 
+
+// /KOT
+app.post('/storeselect', function (req, res) {
+    // console.log(req.ip, req.hostname)
+    var i = 0;
+    var j = Object.keys(req.body).length
+    var response = { msg: "data set" }
+    Object.keys(req.body).forEach(key => {
+        // console.log(key, req.body[key]?.length)
+        if (key == "preorders") {
+            db[key].remove({ OrderId: { $gt: 0 } }, { multi: true }, function (err, numRemoved) {
+                // console.log(key, err, numRemoved, req.body[key])
+                var k = 0
+                if (req.body[key].length == 0) {
+                    i++
+                    if (i == j) res.send(response)
+                }
+                req.body[key].forEach((order, index) => {
+                    db[key].update({ InvoiceNo: order.InvoiceNo }, order, { upsert: true }, function (err1, newDoc) { // Callback is optional
+                        if (err1) {
+                            console.log(key);
+                            console.log(err1)
+                        }
+                        k++
+                        if (k == req.body[key].length) {
+                            i++
+                            if (i == j) res.send(response)
+                        }
+                    })
+                })
+            })
+        } else {
+            if (req.body[key] == null) req.body[key] = []
+            db[key].remove({}, { multi: true }, function (err, numRemoved) {
+                db[key].insert(req.body[key], function (err1, newDoc) { // Callback is optional
+                    if (err1) {
+                        console.log(key);
+                        console.log(err1)
+                    }
+                    i++
+                    if (i == j) res.send(response)
+                })
+            })
+        }
+    })
+});
 app.post('/updateprintersettings', function (req, res) {
     db.printersettings.update({ _id: req.body._id }, req.body, { upsert: true }, function (err, docs) {
         var obj = { status: 200, msg: "data added succesfully" }
@@ -1050,7 +1166,7 @@ app.post('/updateprintersettings', function (req, res) {
 app.post('/savepreorder', function (req, res) {
     console.log(req.ip, req.hostname)
     req.body.status = "P"
-    db.preordersdb.insert(req.body, function (err1, newDoc) {   // Callback is optional
+    db.preorders.insert(req.body, function (err1, newDoc) {   // Callback is optional
         console.log('Line: 188', err1)
         res.send({ msg: "success" })
     })

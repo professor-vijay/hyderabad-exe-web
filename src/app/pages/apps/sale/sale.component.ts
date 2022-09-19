@@ -140,7 +140,7 @@ export class SaleComponent implements OnInit {
             .filter(
               v =>
                 (v.product.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
-                  v.barCode?.toLowerCase().indexOf(term.toLowerCase()) > -1) &&
+                  v.BarCode?.toLowerCase().indexOf(term.toLowerCase()) > -1) &&
                 v.quantity > 0 && !this.barcodeMode,
             )
             .slice(0, 10),
@@ -277,8 +277,8 @@ export class SaleComponent implements OnInit {
   barcodeMode: boolean = false
   setproductbybarcode(code) {
     this.barcodeMode = false
-    console.log(code, this.products.filter(x => x.barCode == code));
-    var product = this.products.filter(x => x.barCode == code && x.quantity > 0)[0];
+    console.log(code, this.products.filter(x => x.BarCode == code));
+    var product = this.products.filter(x => x.BarCode == code && x.quantity > 0)[0];
     if (product) {
       console.log(product);
       this.temporaryItem = product;

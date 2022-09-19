@@ -99,55 +99,55 @@
 </div>
 
 <div *ngIf="sectionid == 1">
-   <!-- Dine In page -->
-   <div *ngIf="orderpageid == 1">
-    <div>
-        <div class="headleft" style="float: left;">
-            <div class="btn-group mr-2 mb-2">
-                <button type="button" class="btn" (click)="createorder(5)">Quick Order</button>
-                <button type="button" class="btn" (click)="vieworderlist(1)">Dine In </button>
-                <button type="button" class="btn" (click)="vieworderlist(2)">Takeaway </button>
-                <button type="button" class="btn" (click)="vieworderlist(3)">Delivery</button>
-                <button type="button" class="btn" (click)="vieworderlist(4)">PickUp</button>
-                <!-- <button type="button" class="btn" (click)="vieworderlist(6)">Current Order</button> -->
-                <button type="button" class="btn" (click)="vieworderlist(6)">Online Order</button>
-            </div>
-        </div>
-        <div class="headright" style="float: right;">
-            <button type="button" class="btn btn-danger" (click)="sectionid = 0">Back</button>
-        </div>
-    </div>
-    <br><br>
-    <div class="card card-body">
+    <!-- Dine In page -->
+    <div *ngIf="orderpageid == 1">
         <div>
-            <div style="float: left;" class="left">
-                <div class="d-inline-block mb-3 mr-3">
-                    <div ngbDropdown class="d-inline-block mb-2 mr-2">
-                        <button class="btn btn-outline-default" id="active"
-                            ngbDropdownToggle>{{currentDiningArea.DiningArea}}</button>
-                        <div ngbDropdownMenu aria-labelledby="active">
-                            <button ngbDropdownItem *ngFor="let area of diningareas"
-                                [class.active]="currentDiningArea.Id == area.Id"
-                                (click)="currentDiningArea = area">{{area.DiningArea}}</button>
-                            <!-- <button ngbDropdownItem>Another action</button> -->
-                        </div>
-                    </div>
+            <div class="headleft" style="float: left;">
+                <div class="btn-group mr-2 mb-2">
+                    <button type="button" class="btn" (click)="createorder(5)">Quick Order</button>
+                    <button type="button" class="btn" (click)="vieworderlist(1)">Dine In </button>
+                    <button type="button" class="btn" (click)="vieworderlist(2)">Takeaway </button>
+                    <button type="button" class="btn" (click)="vieworderlist(3)">Delivery</button>
+                    <button type="button" class="btn" (click)="vieworderlist(4)">PickUp</button>
+                    <!-- <button type="button" class="btn" (click)="vieworderlist(6)">Current Order</button> -->
+                    <button type="button" class="btn" (click)="vieworderlist(6)">Online Order</button>
                 </div>
             </div>
-            <div style="float: right;" class="right">
-                <div class="btn-group mr-2 mb-2">
-                    <button type="button" [class.active]="tablefilterid == -1" (click)="tablefilterid = -1"
-                        class="btn">All</button>
-                    <button type="button" [class.active]="tablefilterid == 0" (click)="tablefilterid = 0"
-                        class="btn">Empty</button>
-                    <button type="button" [class.active]="tablefilterid == 1" (click)="tablefilterid = 1"
-                        class="btn">Seated</button>
-                </div>
+            <div class="headright" style="float: right;">
+                <button type="button" class="btn btn-danger" (click)="sectionid = 0">Back</button>
             </div>
         </div>
         <br><br>
-        <div class="col-xl-12 col-lg-12 row">
-            <!-- <div hidden *ngFor="let table of diningtables | diningtable: currentDiningArea.Id : tablefilterid"
+        <div class="card card-body">
+            <div>
+                <div style="float: left;" class="left">
+                    <div class="d-inline-block mb-3 mr-3">
+                        <div ngbDropdown class="d-inline-block mb-2 mr-2">
+                            <button class="btn btn-outline-default" id="active"
+                                ngbDropdownToggle>{{currentDiningArea.DiningArea}}</button>
+                            <div ngbDropdownMenu aria-labelledby="active">
+                                <button ngbDropdownItem *ngFor="let area of diningareas"
+                                    [class.active]="currentDiningArea.Id == area.Id"
+                                    (click)="currentDiningArea = area">{{area.DiningArea}}</button>
+                                <!-- <button ngbDropdownItem>Another action</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="float: right;" class="right">
+                    <div class="btn-group mr-2 mb-2">
+                        <button type="button" [class.active]="tablefilterid == -1" (click)="tablefilterid = -1"
+                            class="btn">All</button>
+                        <button type="button" [class.active]="tablefilterid == 0" (click)="tablefilterid = 0"
+                            class="btn">Empty</button>
+                        <button type="button" [class.active]="tablefilterid == 1" (click)="tablefilterid = 1"
+                            class="btn">Seated</button>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <div class="col-xl-12 col-lg-12 row">
+                <!-- <div hidden *ngFor="let table of diningtables | diningtable: currentDiningArea.Id : tablefilterid"
                 class="col-xl-3 col-lg-3 py-3">
                 <div class="sp-metric shadow py-3">
                     <h4>{{table.TableName}}</h4>
@@ -155,38 +155,38 @@
                 </div>
             </div> -->
 
-            <a *ngFor="let table of diningtables | diningtable: currentDiningArea.Id : tablefilterid"
-                class="col-xl-3 col-lg-3">
-                <div class="card">
-                    <div class="card-body" [class.table-occupied]="table.TableStatusId == 1">
-                        <div *ngIf="table.TableStatusId == 1 || table.TableKey.includes('_')"
-                            class="hover table-card-menu">
-                            <button *ngIf="!table.TableKey.includes('_')" class="btn btn-link text-success"
-                                (click)="splittable(table.Id, table.LastSplitTableId)">split</button>
-                            <button *ngIf="table.TableKey.includes('_') && table.TableStatusId != 1"
-                                class="btn btn-link text-danger" (click)="removeplittable(table.TableKey)"><i
-                                    class="fe fe-trash"></i></button>
-                        </div>
-                        <div class="item mb-xl-0 mb-3 mouseover"
-                            (click)="createtableorder(table.Id, table.TableKey)">
-                            <span class="icon">
-                                <img src="./assets/images/Extra/table-2.0.png" alt="" width="35%">
-                            </span>
-                            <br>
-                            <div class="desc" style="padding-left: 25%;">
-                                <span class="title" style="font-size: large;">{{table.TableName}}</span>
-                                <div *ngIf="table.TableStatusId > 0" class="circle pulse bg-success"></div>
+                <a *ngFor="let table of diningtables | diningtable: currentDiningArea.Id : tablefilterid"
+                    class="col-xl-3 col-lg-3">
+                    <div class="card">
+                        <div class="card-body" [class.table-occupied]="table.TableStatusId == 1">
+                            <div *ngIf="table.TableStatusId == 1 || table.TableKey.includes('_')"
+                                class="hover table-card-menu">
+                                <button *ngIf="!table.TableKey.includes('_')" class="btn btn-link text-success"
+                                    (click)="splittable(table.Id, table.LastSplitTableId)">split</button>
+                                <button *ngIf="table.TableKey.includes('_') && table.TableStatusId != 1"
+                                    class="btn btn-link text-danger" (click)="removeplittable(table.TableKey)"><i
+                                        class="fe fe-trash"></i></button>
                             </div>
-                            <br>
-                            <div *ngIf="table.TableStatusId == 0" class="line bg-secondary"></div>
-                            <div *ngIf="table.TableStatusId > 0" class="line bg-success"></div>
+                            <div class="item mb-xl-0 mb-3 mouseover"
+                                (click)="createtableorder(table.Id, table.TableKey)">
+                                <span class="icon">
+                                    <img src="./assets/images/Extra/table-2.0.png" alt="" width="35%">
+                                </span>
+                                <br>
+                                <div class="desc" style="padding-left: 25%;">
+                                    <span class="title" style="font-size: large;">{{table.TableName}}</span>
+                                    <div *ngIf="table.TableStatusId > 0" class="circle pulse bg-success"></div>
+                                </div>
+                                <br>
+                                <div *ngIf="table.TableStatusId == 0" class="line bg-secondary"></div>
+                                <div *ngIf="table.TableStatusId > 0" class="line bg-success"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
 
     <!-- Take Away Delivery Pickup Page -->
@@ -296,7 +296,7 @@
             <nz-table>
                 <thead>
                     <tr>
-                        <th class="sort-header" (click)="sortpreorders('OrderNo')">Order No. {{sortstatus['OrderNo'] ==
+                        <th class="sort-header" (click)="sortpreorders('orderNo')">Order No. {{sortstatus['OrderNo'] ==
                             1 ? '⬇' : sortstatus['OrderNo'] == -1 ? '⬆' : ''}}</th>
                         <th class="text-center">Customer</th>
                         <th class="text-center sort-header" (click)="sortpreorders('OrderedDateTime')">Ordered Date
@@ -316,17 +316,92 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-
-                        <!-- <td>
-                            <button class="btn btn-light"
+                    <tr *ngFor="let order of preorders | ordertype: orderpageid : orderstatusfilterid : ordersearchterm : fromDate : toDate : datefilterfield : refreshlist"
+                        [ngClass]="{'warning-bg': order.IsAdvanceOrder && (order.deliverytimestamp - currenttimestamp) <= 1800000 && order.orderStatusId != 5 && order.orderStatusId != -1,
+                                    'danger-bg': order.IsAdvanceOrder && (order.deliverytimestamp - currenttimestamp) <= 0 && order.orderStatusId != 5 && order.orderStatusId != -1}">
+                        <td>
+                            <button [disabled]="isOnline&&order.status == 'P'" class="btn btn-light"
                                 (click)="editorder(order)">{{order.InvoiceNo}}</button>
-
                             <button class="btn btn-link" (click)="vieworder(order)"><i class="fe fe-eye"></i></button>
                             <i nz-icon [nzType]="'sync'" [nzSpin]="order.loading" style="cursor: pointer;"
                                 (click)="getOrderById(order)"></i>
+                        </td>
+                        <!-- <td>
+                            <button nz-button nzLoading nzType="danger" nzShape="circle" nzSize="small"></button>
                         </td> -->
-
+                        <td class="text-center">
+                            <span *ngIf="!order.CustomerDetails.Name && !order.CustomerDetails.PhoneNo">N/A</span>
+                            {{order.CustomerDetails.Name}}<br>
+                            {{order.CustomerDetails.PhoneNo}}
+                        </td>
+                        <td class="text-center">{{order.OrderedDateTime | date: 'MMM d, h:mm a'}}</td>
+                        <td class="text-center">
+                            <span *ngIf="!order.DeliveryDateTime">N/A</span>
+                            {{order.DeliveryDateTime | date: 'MMM d, h:mm a'}}
+                        </td>
+                        <td class="text-center">
+                            <span
+                                *ngIf="order.IsAdvanceOrder && (order.Deliverytimestamp - currenttimestamp) > 1000">{{order.Deliverytimestamp
+                                - currenttimestamp | stamp}}</span>
+                            <span *ngIf="order.IsAdvanceOrder && (order.deliverytimestamp - currenttimestamp) <= 0"
+                                class="text-danger">Missed</span>
+                            <span *ngIf="!order.IsAdvanceOrder" class="text-success"> -- </span>
+                        </td>
+                        <td class="text-center">
+                            {{order.PaidAmount}}/{{order.BillAmount}}
+                        </td>
+                        <td>
+                            <button [disabled]="isOnline&&order.status == 'P'"
+                                *ngIf="order.PaidAmount < order.BillAmount" class="btn btn-sm btn-success py-0"
+                                (click)="openpaymentmodal(order)">
+                                PAY
+                            </button>
+                            <span *ngIf="order.PaidAmount == order.BillAmount" class="text-success">PAID</span>
+                            <button [disabled]="isOnline&&order.status == 'P'"
+                                *ngIf="order.PaidAmount > order.BillAmount" class="btn btn-sm btn-danger py-0"
+                                (click)="openrefundmodal(order)">
+                                REFUND
+                            </button>
+                        </td>
+                        <td class="text-center">{{order.status_name}}</td>
+                        <td *ngIf="!customstsbtn" class="text-center">
+                            <button [disabled]="isOnline&&order.status == 'P'" *ngIf="order.OrderStatusId == 0"
+                                class="btn btn-success btn-sm" (click)="orderstatuschange(order, 1)">Accept</button>
+                            <button [disabled]="isOnline&&order.status == 'P'"
+                                *ngIf="order.OrderStatusId == 1 || order.OrderStatusId == 2"
+                                class="btn btn-warning btn-sm" (click)="orderstatuschange(order, 3)">Food Ready</button>
+                            <button [disabled]="isOnline&&order.status == 'P'" *ngIf="order.OrderStatusId == 3"
+                                class="btn btn-dark btn-sm" (click)="orderstatuschange(order, 4)">Dispatch</button>
+                            <button [disabled]="isOnline&&order.status == 'P'" *ngIf="order.OrderStatusId == 4"
+                                class="btn btn-success btn-sm" (click)="orderstatuschange(order, 5)">Delivered</button>
+                            <button
+                                [disabled]="!order.OrderId > 0 || (order.OrderStatusId != -1 && order.PaidAmount != order.BillAmount) || (isOnline&&order.status == 'P')"
+                                *ngIf="order.OrderStatusId == 5 || order.OrderStatusId == -1"
+                                class="btn btn-sm btn-link" (click)="deletepreorder(order)"
+                                [ngClass]="{'text-secondary': (!order.OrderId > 0 || (order.OrderStatusId != -1 && order.PaidAmount != order.BillAmount)), 'text-danger': !(!order.OrderId > 0 || (order.OrderStatusId != -1 && order.PaidAmount != order.BillAmount))}">
+                                <i class="fe fe-trash-2"></i>
+                            </button>
+                        </td>
+                        <td *ngIf="customstsbtn" class="text-center">
+                            <div *ngFor="let btn of order.statusbtns; let i = index">
+                                <button [disabled]="isOnline&&order.status == 'P'" *ngIf="i == 0"
+                                    class="btn btn-sm {{btn.class}}"
+                                    (click)="orderstatuschange(order, btn.OrderStatusId)">
+                                    {{btn.Name}}
+                                </button>
+                            </div>
+                            <button
+                                [disabled]="!order.OrderId > 0 || (order.OrderStatusId != -1 && order.PaidAmount != order.BillAmount) || (isOnline&&order.status == 'P')"
+                                *ngIf="order.OrderStatusId == 5 || order.OrderStatusId == -1"
+                                class="btn btn-sm btn-link" (click)="deletepreorder(order)"
+                                [ngClass]="{'text-secondary': (!order.OrderId > 0 || (order.OrderStatusId != -1 && order.PaidAmount != order.BillAmount)), 'text-danger': !(!order.OrderId > 0 || (order.OrderStatusId != -1 && order.PaidAmount != order.BillAmount))}">
+                                <i class="fe fe-trash-2"></i>
+                            </button>
+                        </td>
+                        <!-- <td>
+                            <button [disabled]="isOnline&&order.status == 'P'" *ngIf="order.OrderStatusId != -1"
+                                class="btn btn-danger btn-sm" (click)="orderstatuschange(order, -1)">Cancel</button>
+                        </td> -->
                     </tr>
                 </tbody>
             </nz-table>
@@ -531,7 +606,7 @@
                                 <input id="typeahead-template" style="height: 100%;" #instance="ngbTypeahead"
                                     type="text" class="form-control" [(ngModel)]="model" placeholder="Search Product..."
                                     [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
-                                    (selectItem)="selectedItem($event.item)"/>
+                                    (selectItem)="selectedItem($event.item)" />
                                 <span *ngIf="model != ''" class="search-clear" aria-hidden="true"
                                     (click)="model = ''">×</span>
                             </div>
@@ -675,7 +750,8 @@
                             (click)="saveorder()">
                             <i class="fa fa-rupee"></i>
                             {{order.BillAmount | number: '0.2'}}<br>
-                            Receive
+                            Receive<br>
+                            [Esc]
                         </button>
                     </div>
                 </div>
@@ -704,7 +780,7 @@
                     <button class="btn btn-success" [disabled]="order.BillAmount <= 0"
                         (click)="generatekot();visible = !visible">
                         <i class="fe fe-shopping-cart"></i>
-                        Charge - (&#8377; {{order.billAmount}})
+                        Charge - (&#8377; {{order.BillAmount}})
                     </button>
                 </div>
             </div>
@@ -737,7 +813,7 @@
 <!-- Modal Option Group -->
 <ng-template #prod_details let-modal>
     <div class="modal-header">
-        <h5 class="modal-title">{{currentitem.product}}</h5>
+        <h5 class="modal-title">{{currentitem.Product}}</h5>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -747,9 +823,9 @@
             <div class="col-sm-12 mb-10">
                 <b>TYPES : </b>
                 <span class="badge"
-                    [ngClass]="{ 'badge-success': currentitem.productId == 1, 
-                    'badge-danger': currentitem.productId == 2,'badge-warning': currentitem.productId == 3 }"><b>{{currentitem.productId
-                        == 1? 'veg' : currentitem.productId == 2? 'non-veg' : 'egg'}}</b></span>
+                    [ngClass]="{ 'badge-success': currentitem.ProductTypeId == 1, 
+                    'badge-danger': currentitem.ProductTypeId == 2,'badge-warning': currentitem.ProductTypeId == 3 }"><b>{{currentitem.ProductTypeId
+                        == 1? 'veg' : currentitem.ProductTypeId == 2? 'non-veg' : 'egg'}}</b></span>
             </div>
             <br>
             <div class="col-sm-6 ml-3">
@@ -849,7 +925,7 @@
         <!-- <button type="button" class="btn btn-light" (click)="modal.close('Save click')">Cancel</button> -->
         <div class="mr-auto">
             <h5 class="float-left"> Price : </h5>
-            <h5 class="float-right ml-1"><b> {{currentitem.TotalAmount}} </b></h5>
+            <h5 class="float-right ml-1"><b> {{currentitem.TotalAmount + currentitem.Extra}} </b></h5>
         </div>
         <button type="button" class="btn btn-primary" (click)="addcurrentitem()">Save Changes</button>
     </div>
@@ -857,79 +933,104 @@
 
 
 <!-- Take Away Right side Drawer -->
-<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" nzTitle="Check Out" [nzWidth]="720">
-
-    <div class="container">
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" nzTitle="Check Out" (nzOnClose)="modalclose()"
+    [nzWidth]="720">
+    <div class="container" *ngIf="order">
         <div class="row">
             <div class="col-sm pr-0">
-                <label class="text-dark"><b>Customer Mobile No</b></label><span class="text-danger">*</span>
+                <label class="text-dark"><b>Customer Mobile No</b></label><span *ngIf="order.IsAdvanceOrder"
+                    class="text-danger">*</span>
                 <div class="input-group">
-                    <input type="text" class="form-control w-100"><br>
-                    <span class="text-danger" style="font-size: 10px; position: absolute; top: 40px;">Customer contact
-                        is mandatory for
+                    <!-- <nz-input-number class="form-control"></nz-input-number> -->
+                    <input type="text" (keyup.enter)="getcustomer()" (focusout)="getcustomer()"
+                        [(ngModel)]="order.CustomerDetails.PhoneNo" class="form-control w-100"
+                        [ngClass]="{'is-invalid' : placeorderclicked && !order.CustomerDetails.PhoneNo && order.IsAdvanceOrder}"><br>
+                    <span class="text-danger"
+                        *ngIf="placeorderclicked && !order.CustomerDetails.PhoneNo && order.IsAdvanceOrder"
+                        style="font-size: 10px; position: absolute; top: 40px;">Customer contact is mandatory for
                         Advanced Order</span>
                 </div>
                 <br>
                 <label class="text-dark"><b>Customer Name</b></label>
                 <div class="input-group">
-                    <input class="form-control" type="text">
+                    <input class="form-control" [(ngModel)]="order.CustomerDetails.Name" type="text">
                 </div>
                 <br>
                 <label class="text-dark"><b>Customer Email</b></label>
                 <div class="input-group">
-                    <input class="form-control" type="text">
+                    <input class="form-control" [(ngModel)]="order.CustomerDetails.Email" type="text">
                 </div>
                 <br>
                 <label class="text-dark" for="note"><b>Address</b></label>
-                <textarea class="form-control" rows="4" name="NOTE" type="text"></textarea>
+                <textarea class="form-control" [(ngModel)]="order.CustomerDetails.Address" id="note" rows="4"
+                    name="NOTE" type="text"></textarea>
                 <br>
                 <label class="text-dark"><b>City</b></label>
                 <div class="input-group">
-                    <input class="form-control" type="text">
+                    <input class="form-control" [(ngModel)]="order.CustomerDetails.City" type="text">
                 </div>
             </div>
             <div class="col-sm">
-                <label class="text-dark" for="note"><b>Delivery Date Time</b></label><span class="text-danger">*</span>
-                <div class="row col-sm-12 pr-0">
-                    <input type="date" class="form-control col-sm-6">
-                    <input type="time" class="form-control col-sm-6">
+                <label *ngIf="order.IsAdvanceOrder" class="text-dark" for="note"><b>Delivery Date Time</b></label><span
+                    *ngIf="order.IsAdvanceOrder" class="text-danger">*</span>
+                <div *ngIf="order.IsAdvanceOrder" class="row col-sm-12 pr-0">
+                    <input type="date" [(ngModel)]="deliverydate" class="form-control col-sm-6"
+                        [ngClass]="{'is-invalid' : placeorderclicked && (!deliverydate || isvalid_delivery_date)}">
+                    <input type="time" [(ngModel)]="deliverytime" class="form-control col-sm-6"
+                        [ngClass]="{'is-invalid' : placeorderclicked && !deliverytime}">
                 </div>
-                <br>
-                <span style="font-size: 10px; position: absolute; top: 80px;" class="text-danger">Delivery Date Time is
+                <br *ngIf="order.IsAdvanceOrder">
+                <span
+                    *ngIf="((placeorderclicked && !deliverydate) || (placeorderclicked && !deliverytime)) && order.IsAdvanceOrder"
+                    style="font-size: 10px; position: absolute; top: 80px;" class="text-danger">Delivery Date Time is
                     mandatory for Advanced Order</span>
-                <span class="text-danger" style="font-size: 10px; position: absolute; top: 70px;">Invalid Date</span>
-                <br>
-                <div class="row pl-3">
+                <span class="text-danger" *ngIf="placeorderclicked && !isvalid_delivery_date && order.IsAdvanceOrder"
+                    style="font-size: 10px; position: absolute; top: 70px;">Invalid Date</span>
+
+                <br
+                    *ngIf="((placeorderclicked && !deliverydate) || (placeorderclicked && !deliverytime)) && order.IsAdvanceOrder">
+
+                <div class="row pl-3" *ngIf="order.IsAdvanceOrder">
                     <label for="deliveryStore" class="text-dark"><b>Delivery Store</b></label>
-                    <select name="deliveryStore" class="form-control">
+                    <!-- <span class="text-danger">*</span> -->
+                    <select name="deliveryStore" [(ngModel)]="order.DeliveryStoreId" class="form-control">
                         <option selected disabled>Select a Store </option>
-                        <option></option>
+                        <option *ngFor="let store of stores" value={{store.Id}}>{{store.Name}}</option>
                     </select>
                 </div>
-                <button class="btn btn-link"> <i class="fe fe-printer"></i> Print Receipt </button> <br>
-                <label class="text-dark" for="note"><b>Booking Note</b></label>
-                <textarea class="form-control" rows="4" name="NOTE" type="text"></textarea>
+
+                <button *ngIf="order.OrderTypeId == 1" class="btn btn-link" (click)="receivetableorder()"> <i
+                        class="fe fe-printer"></i> Print Receipt </button> <br>
+                <label *ngIf="order.IsAdvanceOrder" class="text-dark" for="note"><b>Booking Note</b></label>
+                <textarea *ngIf="order.IsAdvanceOrder" class="form-control" [(ngModel)]="order.Note" id="note" rows="4"
+                    name="NOTE" type="text"></textarea>
                 <br>
                 <label class="text-dark"><b>Payment Types</b></label>
                 <div class="input-group">
-                    <button class="btn btn-outline-success m-1"></button>
-                    <button class="btn btn-outline-warning m-1">Unpaid</button>
-                    <button class="btn btn-outline-secondary m-1">Split</button>
+                    <button *ngFor="let type of storePaymentTypes" class="btn btn-outline-success m-1"
+                        [disabled]="order.BillAmount <= 0" (click)="setpayment(type.id)"
+                        [class.active]="order.StorePaymentTypeId == type.id">{{type.name}}</button>
+                    <button *ngIf="order.OrderTypeId != 1" class="btn btn-outline-warning m-1"
+                        (click)="order.PaidAmount = 0;order.StorePaymentTypeId = 0"
+                        [class.active]="order.StorePaymentTypeId == 0">Unpaid</button>
+                    <button class="btn btn-outline-secondary m-1" (click)="opensplitpaymentmodal()"
+                        [class.active]="splitpaymenttotal > 0">Split</button>
                 </div>
                 <div class="input-group">
-                    <input class="form-control">
-                    <span class="text-danger">* Paid Amount can't be greater
+                    <input [disabled]="order.StorePaymentTypeId <= 0" class="form-control"
+                        [(ngModel)]="order.PaidAmount" type="number"
+                        [ngClass]="{'is-invalid':order.PaidAmount > order.BillAmount}" (input)="paidamountinputevent()">
+                    <span *ngIf="order.PaidAmount > order.BillAmount" class="text-danger">* Paid Amount can't be greater
                         than Bill Amount</span>
                 </div>
             </div>
         </div>
     </div>
-
     <br>
-    <nz-footer class="float-right">
-        <button class="btn mr-3 btn-secondary">Back</button>
-        <button class="btn btn-success">Receive
-        </button>
+    <nz-footer class="float-right" *ngIf="order">
+        <button class="btn mr-3 btn-secondary" (click)="visible = false">Back</button>
+        <button class="btn btn-success" [disabled]="order.PaidAmount > order.BillAmount" (click)="saveorder()">Receive
+            (&#8377; {{order.PaidAmount}})</button>
     </nz-footer>
 </nz-drawer>
 
@@ -989,13 +1090,13 @@
             <label class="text-dark"><b>Customer Mobile No</b></label><span *ngIf="order.IsAdvanceOrder"
                 class="text-danger">*</span>
             <div class="input-group">
+                <!-- <nz-input-number class="form-control"></nz-input-number> -->
                 <input type="text" (keyup.enter)="getcustomer()" (focusout)="getcustomer()"
                     [(ngModel)]="order.CustomerDetails.PhoneNo" class="form-control w-100"
                     [ngClass]="{'is-invalid' : placeorderclicked && !order.CustomerDetails.PhoneNo && order.IsAdvanceOrder}"><br>
                 <span class="text-danger"
                     *ngIf="placeorderclicked && !order.CustomerDetails.PhoneNo && order.IsAdvanceOrder"
-                    style="font-size: 10px; position: absolute; top: 40px;">Customer contact is
-                    mandatory for
+                    style="font-size: 10px; position: absolute; top: 40px;">Customer contact is mandatory for
                     Advanced Order</span>
             </div>
             <br>
@@ -1017,6 +1118,8 @@
     <br>
     <nz-footer class="float-right" *ngIf="order">
         <button class="btn mr-3 btn-secondary" (click)="customerdetaildrawer = false">Done</button>
+        <!-- <button class="btn btn-success" [disabled]="order.PaidAmount > order.BillAmount" (click)="saveorder()">Receive
+            (&#8377; {{order.PaidAmount}})</button> -->
     </nz-footer>
 </nz-drawer>
 
@@ -1603,93 +1706,109 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body">
+    <div *ngIf="temporder" class="modal-body">
         <div class="col-lg-12 row">
             <div class="col-lg-6 p-5">
                 <strong>Transaction Type: </strong>
-                <span class="text-success">Sales</span>
-                <span class="text-danger">Refund</span>
+                <span class="text-success" *ngIf="transaction.TranstypeId == 1">Sales</span>
+                <span class="text-danger" *ngIf="transaction.TranstypeId == 2">Refund</span>
                 <br>
-                <strong>Bill Amount: </strong> <span class="text-success"></span><br>
-                <strong>Paid Amount: </strong> <span class="text-warning"></span><br>
-                <strong>Remaining : </strong> <span class="text-warning"></span><br>
+                <strong>Bill Amount: </strong> <span class="text-success">{{temporder.BillAmount}}</span><br>
+                <strong>Paid Amount: </strong> <span class="text-warning">{{temporder.PaidAmount}}</span><br>
+                <strong>Remaining : </strong> <span class="text-warning">{{transaction.Remaining}}</span><br>
             </div>
             <div class="col-lg-6">
                 <div class="card card-body"
                     style="background-color: rgb(235, 246, 249, 1); border-color: rgb(72, 166, 182);">
 
                     <div class="card-title">
-                        <nz-switch>
+                        <nz-switch [(ngModel)]="issplitpayment" (ngModelChange)="issplitpayment&&splitpayment()">
                         </nz-switch> Split Payment
                     </div>
-                    <div class="card-body">
-                        <div class="col-lg-12 row" style="align-items: center;">
+                    <div *ngIf="!issplitpayment" class="card-body">
+                        <div class="col-lg-12 row" *ngFor="let type of storePaymentTypes" style="align-items: center;">
                             <div class="col-lg-6">
-                                <input class="form-check-input" type="radio">
-                                <label class="form-check-lable">
+                                <input class="form-check-input" type="radio" value=type.id name="{{type.id}}"
+                                    id="{{type.id}}" [checked]="transaction.StorePaymentTypeId == type.id"
+                                    (change)="transaction.StorePaymentTypeId = type.id"
+                                    (click)="transaction.Amount = transaction.Remaining">
+                                <label class="form-check-lable"
+                                    [style.color]="transaction.StorePaymentTypeId == type.Id ? '#48a6b6' : 'black'"
+                                    for="{{type.id}}">{{type.name}}
                                 </label>
                             </div>
                             <div class="col-lg-6 row" style="align-items: center;">
                                 <span>₹</span>
-                                <input type="number" class="form-control ml-2 w-50">
-                                <span>0</span>
+                                <input *ngIf="transaction.StorePaymentTypeId == type.id" type="number"
+                                    class="form-control ml-2 w-50" [(ngModel)]="transaction.Amount">
+                                <span *ngIf="transaction.StorePaymentTypeId != type.id">0</span>
                             </div>
                         </div>
-                        <span class="text-danger" style="font-size: 10px; position: absolute;">* Amount can't be ZERO or
+                        <span class="text-danger" *ngIf="transaction.Amount <= 0"
+                            style="font-size: 10px; position: absolute;">* Amount can't be ZERO or
                             LESSER</span>
-                        <span class="text-danger" style="font-size: 10px; position: absolute;">* Amount EXCEEDING
-                            Payable Amount</span>
-                        <span class="text-danger" style="font-size: 10px; position: absolute;">* Select a PAYMENT
-                            MODE</span>
+                        <span class="text-danger" *ngIf="transaction.Amount > transaction.Remaining"
+                            style="font-size: 10px; position: absolute;">* Amount EXCEEDING Payable Amount</span>
+                        <span class="text-danger" *ngIf="transaction.StorePaymentTypeId == 0"
+                            style="font-size: 10px; position: absolute;">* Select a PAYMENT MODE</span>
                     </div>
-                    <div class="card-body">
-                        <div class="col-lg-12 row" style="align-items: center;">
+                    <div *ngIf="issplitpayment" class="card-body">
+                        <div class="col-lg-12 row" *ngFor="let transaxn of transactionlist"
+                            style="align-items: center;">
                             <div class="col-lg-6 pl-0">
-                                <label class="form-check-lable">
+                                <label [style.color]="transaxn.Amount>0 ? '#48a6b6' : 'black'"
+                                    class="form-check-lable">{{transaxn.StorePaymentTypeName}}
                                 </label>
                             </div>
                             <div class="col-lg-6 row" style="align-items: center;">
                                 <span>₹</span>
-                                <input type="number" class="form-control ml-2 w-50">
+                                <input type="number" (input)="calculatesplitpaymenttotal()"
+                                    class="form-control ml-2 w-50" [(ngModel)]="transaxn.Amount">
                             </div>
                         </div>
-                        <span class="text-danger" style="font-size: 10px; position: absolute;">* Total Amount EXCEEDING
-                            the Ammount
+                        <span class="text-danger" *ngIf="splitpaymenttotal > transaction.Remaining"
+                            style="font-size: 10px; position: absolute;">* Total Amount EXCEEDING the Ammount
                             Payable</span>
-                        <span class="text-danger" style="font-size: 10px; position: absolute;">* Amount can't be ZERO or
-                            LESSER</span>
+                        <span class="text-danger" *ngIf="splitpaymenttotal == 0"
+                            style="font-size: 10px; position: absolute;">* Amount can't be ZERO or LESSER</span>
                     </div>
-                    <button class="btn btn-success">Pay</button>
-                    <button class="btn btn-danger">Refund</button>
-                    <button class="btn btn-success">Pay</button>
+                    <button *ngIf="!issplitpayment&&transaction.TranstypeId == 1" class="btn btn-success"
+                        (click)="makepayment()"
+                        [disabled]="transaction.StorePaymentTypeId == 0 || !transaction.Amount || transaction.Amount > transaction.Remaining">Pay</button>
+                    <button *ngIf="!issplitpayment&&transaction.TranstypeId == 2" class="btn btn-danger"
+                        (click)="makepayment()"
+                        [disabled]="transaction.StorePaymentTypeId == 0 || !transaction.Amount || transaction.Amount > transaction.Remaining">Refund</button>
+                    <button *ngIf="issplitpayment"
+                        [disabled]="splitpaymenttotal == 0 || splitpaymenttotal > transaction.Remaining"
+                        class="btn btn-success" (click)="makesplitpayment()">Pay</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal-footer">
-        <div>
-            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Back')">
-            </button>
-
+    <div *ngIf="temporder" class="modal-footer">
+        <div *ngIf="issplitpayment">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Back')">{{temporder.deliveryclicked?
+                'Skip' : 'Back'}}</button>
         </div>
-        <div>
-            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Back')">
-            </button>
-
+        <div *ngIf="!issplitpayment">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Back')">{{temporder.deliveryclicked?
+                'Skip' : 'Back'}}</button>
         </div>
     </div>
 </ng-template>
 
 
 <ng-template #viewordermodal let-modal>
-    <div class="modal-header">
-        <h5 class="modal-title"><button class="btn btn-link"><i class="fe fe-copy"></i></button>
+    <div *ngIf="temporder" class="modal-header">
+        <h5 class="modal-title">{{temporder.InvoiceNo}}<button class="btn btn-link"
+                cdkCopyToClipboard="{{temporder.InvoiceNo}}" (click)="showcopiedmsg = true"><i
+                    class="fe fe-copy"></i></button>
         </h5>
-        <button type="button" class="close" aria-label="Close">
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body">
+    <div *ngIf="temporder" class="modal-body">
         <table class="table">
             <thead>
                 <th>#</th>
@@ -1697,91 +1816,108 @@
                 <th>Quantity</th>
                 <th>Price</th>
             </thead>
-            <tbody>
-                <td><code></code></td>
-                <td></td>
-                <td></td>
-                <td></td>
+            <tbody *ngFor="let item of temporder.Items">
+                <td><code>{{item.ProductId}}</code></td>
+                <td>{{item.showname}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.TotalAmount}}</td>
             </tbody>
         </table>
         <div class="col-sm-12 row">
             <span class="col-sm-6">
-                <Strong>BillAmount: </Strong>
+                <Strong>BillAmount: </Strong> {{temporder.BillAmount}}
             </span>
             <span class="col-sm-6">
-                <Strong>PaidAmount: </Strong>
+                <Strong>PaidAmount: </Strong> {{temporder.PaidAmount}}
             </span>
         </div>
         <div>
-            <button class="btn btn-link float-right"><i class="fe fe-printer"></i> Receipt Print</button>
+            <button class="btn btn-link float-right" (click)="printreceiptbyorder(temporder)"><i
+                    class="fe fe-printer"></i> Receipt Print</button>
         </div>
         <div class="col-xl-12 row">
             <div class="col-xl-6">
                 <h5>Customer Details</h5>
                 <label class="text-dark"><b>Customer Name</b></label>
                 <div class="input-group">
-                    <input class="form-control blue-border" type="text">
+                    <input class="form-control blue-border" [(ngModel)]="temporder.CustomerDetails.Name" type="text">
                 </div>
                 <br>
-                <label class="text-dark"><b>Customer Mobile No</b></label><span class="text-danger">*</span>
+                <label class="text-dark"><b>Customer Mobile No</b></label><span *ngIf="temporder.IsAdvanceOrder"
+                    class="text-danger">*</span>
                 <div class="input-group">
-                    <input type="text" class="form-control blue-border w-100"><br>
-                    <span class="text-danger" style="font-size: 10px; position: absolute; top: 40px;">Customer contact
-                        is mandatory for
+                    <!-- <nz-input-number class="form-control"></nz-input-number> -->
+                    <input type="text" (keyup.enter)="getcustomer()" (focusout)="getcustomer()"
+                        [(ngModel)]="temporder.CustomerDetails.PhoneNo" class="form-control blue-border w-100"
+                        [ngClass]="{'is-invalid' : placeorderclicked && !temporder.CustomerDetails.PhoneNo && temporder.IsAdvanceOrder}"><br>
+                    <span class="text-danger"
+                        *ngIf="placeorderclicked && !temporder.CustomerDetails.PhoneNo && temporder.IsAdvanceOrder"
+                        style="font-size: 10px; position: absolute; top: 40px;">Customer contact is mandatory for
                         Advanced Order</span>
                 </div>
                 <br>
                 <label class="text-dark"><b>Customer Email</b></label>
                 <div class="input-group">
-                    <input class="form-control blue-border" type="text">
+                    <input class="form-control blue-border" [(ngModel)]="temporder.CustomerDetails.Email" type="text">
                 </div>
                 <br>
                 <label class="text-dark" for="note"><b>Address</b></label>
-                <textarea class="form-control blue-border" id="note" rows="4" name="NOTE" type="text"></textarea>
+                <textarea class="form-control blue-border" [(ngModel)]="temporder.CustomerDetails.Address" id="note"
+                    rows="4" name="NOTE" type="text"></textarea>
                 <br>
                 <label class="text-dark"><b>City</b></label>
                 <div class="input-group">
-                    <input class="form-control blue-border" type="text">
+                    <input class="form-control blue-border" [(ngModel)]="temporder.CustomerDetails.City" type="text">
                 </div>
             </div>
             <div class="col-xl-6">
                 <h5>Order Details</h5>
-                <label class="text-dark" for="note"><b>Delivery Date
-                        Time</b></label><span class="text-danger">*</span>
-                <div class="row col-sm-12 pr-0">
-                    <input type="date" class="form-control blue-border col-sm-6">
-                    <input type="time" class="form-control blue-border col-sm-6">
+                <label *ngIf="temporder.IsAdvanceOrder" class="text-dark" for="note"><b>Delivery Date
+                        Time</b></label><span *ngIf="temporder.IsAdvanceOrder" class="text-danger">*</span>
+                <div *ngIf="temporder.IsAdvanceOrder" class="row col-sm-12 pr-0">
+                    <input type="date" [(ngModel)]="deliverydate" class="form-control blue-border col-sm-6"
+                        [ngClass]="{'is-invalid' : placeorderclicked && !deliverydate}">
+                    <input type="time" [(ngModel)]="deliverytime" class="form-control blue-border col-sm-6"
+                        [ngClass]="{'is-invalid' : placeorderclicked && !deliverytime}">
                 </div>
-                <span style="font-size: 10px; position: absolute; top: 40px;" class="text-danger">Delivery Date Time is
+                <span
+                    *ngIf="((placeorderclicked && !deliverydate) || (placeorderclicked && !deliverytime)) && temporder.IsAdvanceOrder"
+                    style="font-size: 10px; position: absolute; top: 40px;" class="text-danger">Delivery Date Time is
                     mandatory for Advanced Order</span>
-                <br>
-
-                <div class="row pl-3">
+                <br *ngIf="temporder.IsAdvanceOrder">
+                <!-- <button *ngIf="temporder.OrderTypeId == 1" class="btn btn-link" (click)="receivetableorder()"> <i
+                        class="fe fe-printer"></i> Print Receipt </button>
+                <br> -->
+                <div class="row pl-3" *ngIf="temporder.IsAdvanceOrder">
                     <label for="deliveryStore" class="text-dark"><b>Delivery Store</b></label><span
                         class="text-danger">*</span>
-                    <select name="deliveryStore" class="form-control blue-border">
+                    <select name="deliveryStore" [(ngModel)]="temporder.DeliveryStoreId"
+                        class="form-control blue-border">
                         <option value=null>Select a Store </option>
-                        <option></option>
+                        <option *ngFor="let store of stores" value={{store.Id}}>{{store.Name}}</option>
                     </select>
                 </div>
-                <label class="text-dark" for="note"><b>Booking Note</b></label>
-                <textarea class="form-control blue-border" id="note" rows="4" name="NOTE" type="text"></textarea>
+                <!-- {{temporder.OrderTypeId}} -->
+                <label *ngIf="temporder.IsAdvanceOrder" class="text-dark" for="note"><b>Booking Note</b></label>
+                <textarea *ngIf="temporder.IsAdvanceOrder" class="form-control blue-border" [(ngModel)]="temporder.Note"
+                    id="note" rows="4" name="NOTE" type="text"></textarea>
 
-                <label class="text-dark" for="note"><b>Order type</b></label>
-                <select class="form-control blue-border">
+                <label *ngIf="temporder.IsAdvanceOrder" class="text-dark" for="note"><b>Order type</b></label>
+                <select *ngIf="temporder.IsAdvanceOrder" [(ngModel)]="temporder.OrderTypeId"
+                    class="form-control blue-border">
                     <option value=3>Delivery</option>
                     <option value=4>PickUp</option>
                 </select>
-                <br>
+                <br *ngIf="temporder.IsAdvanceOrder">
                 <label class="text-dark" for="note"><b>KOT List</b></label>
                 <div class="kotlist">
-                    <div>
-                        <strong></strong>
-                        <span class="pull-right"><button class="btn btn-link"><i
+                    <div *ngFor="let kot of temporder.KOTS">
+                        <strong>#{{kot.KOTNo}}</strong>
+                        <span class="pull-right"><button class="btn btn-link" (click)="printtemporderkot(kot)"><i
                                     class="fe fe-printer"></i></button></span>
-                        <div>
-                            <span></span>
-                            <span class="pull-right"></span>
+                        <div *ngFor="let item of kot.Items">
+                            <span>{{item.showname}}</span>
+                            <span class="pull-right">x {{item.Quantity}}</span>
                         </div>
                         <hr>
                     </div>
@@ -1789,7 +1925,7 @@
             </div>
         </div>
     </div>
-    <div class="modal-footer">
+    <div *ngIf="temporder" class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="modal.close('Save click')">Back</button>
         <button type="button" class="btn btn-success" (click)="savetemporder()">Save</button>
     </div>

@@ -76,7 +76,7 @@ export class SyncfbService {
         //   console.log(data1)
         //   this.auth.getstoredatadb(data1).subscribe(d => {
         //     console.log(d)
-          
+
         //   })
         // })
         this.logresponse(responselogdata)

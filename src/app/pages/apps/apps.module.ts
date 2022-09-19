@@ -99,6 +99,8 @@ import { ProductfbComponent } from './productfb/productfb.component'
 // import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown'
 // import { NgMultiSelectDropDownModule } from '@ng-bootstrap/ng-bootstrap/modal/modal'
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { DineinComponent } from './dinein/dinein.component';
+import { PricebookComponent } from './pricebook/pricebook.component';
 const COMPONENTS = [
   AppsMessagingComponent,
   AppsCalendarComponent,
@@ -204,6 +206,8 @@ const COMPONENTS = [
     AdditionalChargeComponent,
     SellComponent,
     ProductfbComponent,
+    DineinComponent,
+    PricebookComponent,
     // NgMultiSelectDropDownModule
     
   ],

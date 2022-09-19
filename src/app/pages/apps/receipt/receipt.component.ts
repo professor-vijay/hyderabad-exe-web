@@ -128,6 +128,7 @@ export class ReceiptComponent implements OnInit {
 
   ngOnInit(): void {
     this.Auth.getdbdata(['loginfo', 'printersettings']).subscribe(data => {
+      console.log(data)
       const user = JSON.parse(localStorage.getItem("user"))
       this.loginfo = data['loginfo'][0]
       this.printersettings = data['printersettings'][0]
@@ -199,6 +200,7 @@ export class ReceiptComponent implements OnInit {
   getReceipt() {
     this.Auth.GetReceipts(this.StoreId, this.strdate, this.enddate, this.invoice).subscribe(
       data => {
+        
         this.totalsales = 0
         this.totalpayments = 0
         this.totalrefund = 0

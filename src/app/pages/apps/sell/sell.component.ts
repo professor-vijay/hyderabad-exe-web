@@ -33,25 +33,19 @@ export class SellComponent implements OnInit {
   @ViewChild('instance', { static: true }) instance: NgbTypeahead
   @ViewChild('au', { static: true }) autocompleteref: ElementRef
   @ViewChild('viewordermodal', { static: true }) viewordermodal: ElementRef
-  @ViewChild('split_payment_modal', { static: true }) split_payment_modal: ElementRef
-  orderid: any;
+  @ViewChild('split_payment_modal', { static: true }) split_payment_modal: ElementRef  
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
+    event.preventDefault()
     if (event.key == 'F9') {
       var order = JSON.parse(localStorage.getItem('lastorder'))
-      if (order && order.invoiceno) this.printreceiptbyorder(order)
-    }
-    else if (
+      if (order && order.InvoiceNo) this.printreceiptbyorder(order)
+    } else if (
       this.order &&
       this.order.OrderTypeId == 5 &&
       this.order.BillAmount > 0 &&
       event.key == 'F1'
     ) {
-      // if (this.paymentTypes.some(x => x.function_key == event.key)) {
-      //   this.order.StorePaymentTypeId = this.paymentTypes.filter(x => x.function_key == event.key)[0].Id
-      //   this.order.machine_id = this.paymentTypes.filter(x => x.function_key == event.key)[0].MachineId
-      //   this.setpayment(this.order.StorePaymentTypeId)
-      // }
       let last_ind = this.paymentTypes.length - 1
       let current_ind = this.paymentTypes.findIndex(x => x.Id == this.order.StorePaymentTypeId)
       let new_ind = current_ind == last_ind ? (current_ind = 0) : current_ind + 1
@@ -73,11 +67,11 @@ export class SellComponent implements OnInit {
     ) {
       this.draftOrder()
     }
-    // console.log(this.order.OrderTypeId, this.order.StorePaymentTypeId, this.order && this.order.OrderTypeId == 5 && this.order.StorePaymentTypeId != 0 && event.key == 'F10', event)
+    console.log(this.order.OrderTypeId, this.order.StorePaymentTypeId, this.order && this.order.OrderTypeId == 5 && this.order.StorePaymentTypeId != 0 && event.key == 'F10', event)
   }
 
   pendOrderSales: any = {}
-
+  orderid: any;
   draftOrders = []
   showDraft: boolean = false
   selectedDraftIndex: number = -1
@@ -219,8 +213,8 @@ export class SellComponent implements OnInit {
 
 
   ) {
-    config.backdrop = 'static';
-    config.keyboard = false;
+    // config.backdrop = 'static';
+    // config.keyboard = false;
   }
 
 
@@ -394,16 +388,16 @@ export class SellComponent implements OnInit {
       })
       this.customerdetails = { id: 0, name: '', phoneNo: '', email: '', address: '', companyId: this.loginfo.companyId, datastatus: '' }
     })
-    // this.isOnlineserv.subscribe(data => {
-    //   console.log(data)
-    //   this.isOnline = data
-    //   this.event.emitNotif({ networkstatus: this.isOnline })
-    // })
     this.eventConfig()
     const numbers = timer(3000, 1000)
     numbers.subscribe(x => {
       this.currenttimestamp = new Date().getTime()
     })
+    if (localStorage.getItem('draftOrders')) {
+      this.draftOrders = JSON.parse(localStorage.getItem('draftOrders'))
+    } else {
+      localStorage.setItem('draftOrders', '[]')
+    }
 
 
   }
@@ -496,14 +490,14 @@ export class SellComponent implements OnInit {
       )
     }
     this.refreshlist = !this.refreshlist
-    console.log(this.preorders[0].OrderNo)
+    console.log(this.preorders[0].orderNo)
   }
 
   CompanyId: any
   StoreId: any
 
   getdata() {
-    this.auth.getdbdata(['additionalchargesdb', 'loginfo', 'orderkeydb', 'printersettings','diningtabledb','diningareadb']).subscribe(data => {
+    this.auth.getdbdata(['additionalchargesdb', 'loginfo', 'orderkeydb', 'printersettings', 'diningtabledb', 'diningareadb', 'preorders']).subscribe(data => {
       console.log(data)
       this.loginfo = data['loginfo'][0]
       this.orderkey = data["orderkeydb"][0]
@@ -511,6 +505,8 @@ export class SellComponent implements OnInit {
       this.printersettings = data['printersettings'][0]
       this.diningareas = data['diningareadb']
       this.diningtables = data['diningtabledb']
+      this.preorders = data['preorders']
+      console.log(this.preorders)
       console.log(this.diningtables)
       this.CompanyId = this.loginfo.companyId
       this.StoreId = this.loginfo.storeId
@@ -535,7 +531,7 @@ export class SellComponent implements OnInit {
           tbl.TableStatusId = 0
         }
       })
-      return
+
       this.preptimecheck = 1 / (this.loginfo.FoodPrepTime * 10)
       // this.ordservice.getData()
 
@@ -545,7 +541,8 @@ export class SellComponent implements OnInit {
         '4': { '-5': 0, '5': 0, '-1': 0, '-2': 0 },
       }
       this.preorders.forEach(order => {
-        order.status_name = this.orderstatus[order.OrderStatusId].name
+        console.log(order)
+        order.status_name = this.orderstatus[order.orderStatusId].name
         order.deliverytimestamp = order.DeliveryDateTime
           ? new Date(order.DeliveryDateTime).getTime()
           : 0
@@ -590,10 +587,11 @@ export class SellComponent implements OnInit {
     table.TableName = parentTable.TableName + '/' + String.fromCharCode(65 + lastsplittableid)
     parentTable.LastSplitTableId = lastsplittableid + 1
     this.auth.splitTable({ parenttable: parentTable, splittable: table }).subscribe(data => {
-      this.waiterS.waiterSocket.emit('tableorder:update', parentTable.TableKey)
+      console.log(data)
+      if (this.waiterS.waiterSocket)
+        this.waiterS.waiterSocket.emit('tableorder:update', parentTable.TableKey)
       this.gettables()
-      // this.ordservice.getData()
-
+      this.ordservice.getData()
     })
   }
 
@@ -603,14 +601,15 @@ export class SellComponent implements OnInit {
     })
   }
 
-  
+
   removeplittable(splitetablekey) {
     var parentTable = this.diningtables.filter(x => x.Id == +splitetablekey.split('_')[0])[0]
     parentTable.LastSplitTableId -= 1
     this.auth.deletesplittable(splitetablekey).subscribe(data => {
-      this.waiterS.waiterSocket.emit('tableorder:update', parentTable.TableKey)
+      if (this.waiterS.waiterSocket)
+        this.waiterS.waiterSocket.emit('tableorder:update', parentTable.TableKey)
       this.gettables()
-      // this.ordservice.getData()
+      this.ordservice.getData()
     })
   }
 
@@ -630,6 +629,30 @@ export class SellComponent implements OnInit {
           tbl.TableStatusId = 0
         }
       })
+    })
+  }
+
+  getUnfinishedOrders() {
+    this.auth.getUnfinishedOrders(this.loginfo.storeId).subscribe(data => {
+      console.log(data)
+      var storedata = { preorders: [] }
+      data['forEach']((oj, index) => {
+        console.log(oj.id, index, oj.orderNo)
+        if (oj.orderJson) {
+          var json = JSON.parse(oj.orderJson)
+          console.log(json.invoiceNo, oj.orderNo)
+          json.datastatus = ''
+          json.status = 'S'
+          delete json._id
+          storedata['preorders'].push(json)
+        } else {
+          console.log(oj.orderJson)
+        }
+      })
+
+      // this.auth.storeselect(storedata).subscribe(data1 => {
+      this.getpreorders()
+      // })
     })
   }
 
@@ -701,6 +724,16 @@ export class SellComponent implements OnInit {
       this.getstoreuporders()
     }
   }
+  preventobjcpy(obj) {
+    return JSON.parse(JSON.stringify(obj))
+  }
+
+  vieworder(order) {
+    this.temporder = this.preventobjcpy(order)
+    this.deliverydate = this.temporder.DeliveryDateTime.split(' ')[0]
+    this.deliverytime = this.temporder.DeliveryDateTime.split(' ')[1]
+    this.modalService.open(this.viewordermodal, { size: 'xl', backdrop: 'static' })
+  }
   storePaymentTypes: any = []
   GetStorePaymentType() {
     this.auth.getstorepaymentType(this.loginfo.storeId).subscribe(data => {
@@ -719,8 +752,8 @@ export class SellComponent implements OnInit {
   getOrderById(order) {
     order.loading = true
     this.auth.getOrderById(order.OrderId).subscribe(data => {
-      // console.log(data, JSON.parse(data["OrderJson"]))
-      var orderjson = JSON.parse(data['OrderJson'])
+      console.log(data, JSON.parse(data["OrderJson"]))
+      var orderjson = JSON.parse(data['orderJson'])
       orderjson._id = order._id
       orderjson.status = 'S'
       this.auth.updatepreorders(orderjson).subscribe(ldata => {
@@ -762,7 +795,7 @@ export class SellComponent implements OnInit {
       this.order.OrderId = data['OrderId']
       this.show = false
       this.sectionid = 2
-      // console.log(this.order)
+      console.log(this.order)
     })
   }
 
@@ -864,7 +897,7 @@ export class SellComponent implements OnInit {
       }
     })
   }
- savetblorder() {
+  savetblorder() {
     if (this.order.OrderTypeId == 1) {
       this.auth.savetblorder(this.order).subscribe(data => {
         if (this.waiterS.waiterSocket)
@@ -929,7 +962,7 @@ export class SellComponent implements OnInit {
         if (term.includes('*')) {
           term = term.replace('*', '')
           return this.products.filter(
-            x => x.barCode?.toLowerCase() == term.toLowerCase() && term != '' && !x.ishidden,
+            x => x.BarCode?.toLowerCase() == term.toLowerCase() && term != '' && !x.ishidden,
           )
         }
         if (term.includes(' ')) {
@@ -946,7 +979,8 @@ export class SellComponent implements OnInit {
             return match
           })
         } else {
-          return this.products.filter(v => v.product.toLowerCase().indexOf(term.toLowerCase()) > -1 && !v.ishidden)
+          return this.products.filter(v => v.product.toLowerCase().indexOf(term.toLowerCase()) > -1 ||
+          v.BarCode?.toLowerCase().indexOf(term.toLowerCase()) > -1 && !v.ishidden)
         }
       }),
     )
@@ -1105,8 +1139,10 @@ export class SellComponent implements OnInit {
     }
     this.setcurrentitemprice()
   }
+  
 
   formatter = (x: { product: string }) => x.product
+  
   selectedItem(item) {
     console.log(item)
     if (item.hasOwnProperty('OptionGroup')) {
@@ -1118,44 +1154,49 @@ export class SellComponent implements OnInit {
     }
   }
 
-  
+
 
   getpreorders() {
-    // this.auth.getdbdata(['preorders']).subscribe(dbdata => {
-    //   this.preorders = dbdata['preorders']
-    //   this.ordercount = {
-    //     '2': { '-5': 0, '5': 0, '-1': 0, '-2': 0 },
-    //     '3': { '-5': 0, '5': 0, '-1': 0, '-2': 0 },
-    //     '4': { '-5': 0, '5': 0, '-1': 0, '-2': 0 },
-    //   }
-    //   this.preorders.forEach(order => {
-    //     order.status_name = this.orderstatus[order.OrderStatusId].name
-    //     order.deliverytimestamp = order.DeliveryDateTime
-    //       ? new Date(order.DeliveryDateTime).getTime()
-    //       : 0
-    //     if (
-    //       order.OrderStatusId == 5 &&
-    //       (!order.DeliveryStoreId || order.StoreId == order.DeliveryStoreId)
-    //     )
-    //       this.ordercount[order.OrderTypeId.toString()]['5']++
-    //     else if (
-    //       order.OrderStatusId == -1 &&
-    //       (!order.DeliveryStoreId || order.StoreId == order.DeliveryStoreId)
-    //     )
-    //       this.ordercount[order.OrderTypeId.toString()]['-1']++
-    //     else if (!order.DeliveryStoreId || order.StoreId == order.DeliveryStoreId)
-    //       this.ordercount[order.OrderTypeId.toString()]['-5']++
-    //     else if (order.DeliveryStoreId && order.StoreId != order.DeliveryStoreId)
-    //       this.ordercount[order.OrderTypeId.toString()]['-2']++
-    //     // console.log(this.orderstatus[order.OrderStatusId].name)
-    //   })
-    //   this.preorders.sort((a, b) => {
-    //     return new Date(a.DeliveryDateTime).getTime() - new Date(b.DeliveryDateTime).getTime()
-    //   })
-    //   // this.waiterS.waiterSocket.emit("preorder:update", "0")
-    //   // if (this.orderpageid != 0)
-    //   //   this.vieworderlist(this.orderpageid)
-    // })
+    this.auth.getdbdata(['preorders']).subscribe(dbdata => {
+      console.log(dbdata)
+      this.preorders = dbdata['preorders']
+      this.ordercount = {
+        '2': { '-5': 0, '5': 0, '-1': 0, '-2': 0 },
+        '3': { '-5': 0, '5': 0, '-1': 0, '-2': 0 },
+        '4': { '-5': 0, '5': 0, '-1': 0, '-2': 0 },
+      }
+      this.preorders.forEach(order => {
+        // console.log(order)
+        order.status_name = this.orderstatus[order.OrderStatusId].name
+        order.deliverytimestamp = order.DeliveryDateTime
+          ? new Date(order.DeliveryDateTime).getTime()
+          : 0
+        if (
+          order.OrderStatusId == 5 &&
+          (!order.DeliveryStoreId || order.StoreId == order.DeliveryStoreId)
+        )
+          this.ordercount[order.OrderTypeId.toString()]['5']++
+        else if (
+          order.OrderStatusId == -1 &&
+          (!order.DeliveryStoreId || order.StoreId == order.DeliveryStoreId)
+        )
+          this.ordercount[order.OrderTypeId.toString()]['-1']++
+        else if (!order.DeliveryStoreId || order.StoreId == order.DeliveryStoreId)
+          this.ordercount[order.OrderTypeId.toString()]['-5']++
+        else if (order.DeliveryStoreId && order.StoreId != order.DeliveryStoreId)
+          this.ordercount[order.OrderTypeId.toString()]['-2']++
+        console.log(this.orderstatus[order.OrderStatusId].name)
+      })
+      this.preorders.sort((a, b) => {
+        return new Date(a.DeliveryDateTime).getTime() - new Date(b.DeliveryDateTime).getTime()
+      })
+      // this.waiterS.waiterSocket.emit("preorder:update", "0")
+      // if (this.orderpageid != 0)
+      //   this.vieworderlist(this.orderpageid)
+      if (this.sectionid == 2) {
+        this.editorder(this.preorders.filter(x => x.InvoiceNo == this.order.InvoiceNo)[0])
+      }
+    })
   }
 
   draftOrder() {
@@ -1298,6 +1339,7 @@ export class SellComponent implements OnInit {
     if (this.order.IsAdvanceOrder) {
       if (!this.advanceordervalidate() || !this.datevalidation()) return
     }
+    //  this.generatekot()
     this.order.BillDateTime = moment().format('YYYY-MM-DD HH:mm:ss')
     this.order.BillDate = moment().format('YYYY-MM-DD')
     this.order.OrderedDateTime = moment().format('YYYY-MM-DD HH:mm:ss')
@@ -1426,13 +1468,25 @@ export class SellComponent implements OnInit {
     })
   }
 
+  clearDraftOrder() {
+    if (this.selectedDraftIndex > -1) {
+      this.draftOrders.splice(this.selectedDraftIndex, 1)
+      this.draftOrders.forEach((dorder, ind) => {
+        dorder.draftIndex = ind
+      })
+      localStorage.setItem('draftOrders', JSON.stringify(this.draftOrders))
+      this.selectedDraftIndex = -1
+    }
+  }
+
   clearorder(typeid) {
     this.orderlogging('clearing_order')
     this.visible = false
     this.placeorderclicked = false
-    console.log(typeid)
+    // console.log(typeid)
     if (typeid == 5) {
       this.order = null
+      this.clearDraftOrder()
       this.createorder(typeid)
     } else if (typeid == 1) {
       var tablekey = this.order.diningtablekey
@@ -1440,7 +1494,8 @@ export class SellComponent implements OnInit {
         if (tablekey.includes('_')) {
           this.removeplittable(tablekey)
         } else {
-          this.waiterS.waiterSocket.emit('tableorder:update', tablekey)
+          if (this.waiterS.waiterSocket)
+            this.waiterS.waiterSocket.emit('tableorder:update', tablekey)
           this.gettblorders()
         }
       })
@@ -1462,21 +1517,21 @@ export class SellComponent implements OnInit {
     this.transaction.Remaining = this.temporder.BillAmount - this.temporder.PaidAmount
     this.transaction.Amount = this.transaction.Remaining
     this.transaction.OrderId = order.OrderId
-    this.transaction.StoreId = this.loginfo.storeId
+    this.transaction.StoreId = this.loginfo.StoreId
     this.transaction.TransDate = moment().format('YYYY-MM-DD')
     this.transaction.TransDateTime = moment().format('YYYY-MM-DD HH:mm')
     this.transaction.TranstypeId = 1
     this.transaction.UserId = order.UserId
     this.transaction.CompanyId = order.CompanyId
     this.transaction.CustomerId = order.CustomerDetails.Id
-    console.log(this.transaction)
+    // console.log(this.transaction)
     const modalref = this.modalService.open(this.payment_modal, { size: 'xl', backdrop: 'static' })
     modalref.result.then(
       result => {
-        console.log('result', result)
+        // console.log('result', result)
       },
       reason => {
-        console.log('reason', reason)
+        // console.log('reason', reason)
         if (reason == 'Back' && order.deliveryclicked && order.OrderTypeId == 4) {
           this.orderstatuschange(order, 5)
         } else if (!order.deliveryclicked && order.OrderTypeId == 4) {
